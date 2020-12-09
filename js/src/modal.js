@@ -10,11 +10,13 @@ import {
   emulateTransitionEnd,
   getElementFromSelector,
   getTransitionDurationFromElement,
+  isBodyOverflowing,
   isVisible,
   isRTL,
   reflow,
   typeCheckConfig
 } from './util/index'
+import { getScrollBarWidth, resetScrollbar, setScrollbar } from './util/scrollbar'
 import Data from './dom/data'
 import EventHandler from './dom/event-handler'
 import Manipulator from './dom/manipulator'
@@ -58,7 +60,6 @@ const EVENT_MOUSEUP_DISMISS = `mouseup.dismiss${EVENT_KEY}`
 const EVENT_MOUSEDOWN_DISMISS = `mousedown.dismiss${EVENT_KEY}`
 const EVENT_CLICK_DATA_API = `click${EVENT_KEY}${DATA_API_KEY}`
 
-const CLASS_NAME_SCROLLBAR_MEASURER = 'modal-scrollbar-measure'
 const CLASS_NAME_BACKDROP = 'modal-backdrop'
 const CLASS_NAME_OPEN = 'modal-open'
 const CLASS_NAME_FADE = 'fade'
@@ -69,8 +70,6 @@ const SELECTOR_DIALOG = '.modal-dialog'
 const SELECTOR_MODAL_BODY = '.modal-body'
 const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="modal"]'
 const SELECTOR_DATA_DISMISS = '[data-bs-dismiss="modal"]'
-const SELECTOR_FIXED_CONTENT = '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top'
-const SELECTOR_STICKY_CONTENT = '.sticky-top'
 
 /**
  * ------------------------------------------------------------------------
@@ -448,56 +447,24 @@ class Modal extends BaseComponent {
   }
 
   _checkScrollbar() {
-    const rect = document.body.getBoundingClientRect()
-    this._isBodyOverflowing = Math.round(rect.left + rect.right) < window.innerWidth
+    this._isBodyOverflowing = isBodyOverflowing()
     this._scrollbarWidth = this._getScrollbarWidth()
   }
 
   _setScrollbar() {
     if (this._isBodyOverflowing) {
-      this._setElementAttributes(SELECTOR_FIXED_CONTENT, 'paddingRight', calculatedValue => calculatedValue + this._scrollbarWidth)
-      this._setElementAttributes(SELECTOR_STICKY_CONTENT, 'marginRight', calculatedValue => calculatedValue - this._scrollbarWidth)
-      this._setElementAttributes('body', 'paddingRight', calculatedValue => calculatedValue + this._scrollbarWidth)
+      setScrollbar(this._scrollbarWidth)
     }
 
     document.body.classList.add(CLASS_NAME_OPEN)
   }
 
-  _setElementAttributes(selector, styleProp, callback) {
-    SelectorEngine.find(selector)
-      .forEach(element => {
-        const actualValue = element.style[styleProp]
-        const calculatedValue = window.getComputedStyle(element)[styleProp]
-        Manipulator.setDataAttribute(element, styleProp, actualValue)
-        element.style[styleProp] = callback(Number.parseFloat(calculatedValue)) + 'px'
-      })
-  }
-
   _resetScrollbar() {
-    this._resetElementAttributes(SELECTOR_FIXED_CONTENT, 'paddingRight')
-    this._resetElementAttributes(SELECTOR_STICKY_CONTENT, 'marginRight')
-    this._resetElementAttributes('body', 'paddingRight')
+    resetScrollbar()
   }
 
-  _resetElementAttributes(selector, styleProp) {
-    SelectorEngine.find(selector).forEach(element => {
-      const value = Manipulator.getDataAttribute(element, styleProp)
-      if (typeof value === 'undefined' && element === document.body) {
-        element.style[styleProp] = ''
-      } else {
-        Manipulator.removeDataAttribute(element, styleProp)
-        element.style[styleProp] = value
-      }
-    })
-  }
-
-  _getScrollbarWidth() { // thx d.walsh
-    const scrollDiv = document.createElement('div')
-    scrollDiv.className = CLASS_NAME_SCROLLBAR_MEASURER
-    document.body.appendChild(scrollDiv)
-    const scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth
-    document.body.removeChild(scrollDiv)
-    return scrollbarWidth
+  _getScrollbarWidth() {
+    return getScrollBarWidth()
   }
 
   // Static
