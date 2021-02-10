@@ -16,7 +16,7 @@ import {
   reflow,
   typeCheckConfig
 } from './util/index'
-import { getScrollBarWidth, resetScrollbar, setScrollbar } from './util/scrollbar'
+import * as Scrollbar from './util/scrollbar'
 import Data from './dom/data'
 import EventHandler from './dom/event-handler'
 import Manipulator from './dom/manipulator'
@@ -453,18 +453,18 @@ class Modal extends BaseComponent {
 
   _setScrollbar() {
     if (this._isBodyOverflowing) {
-      setScrollbar(this._scrollbarWidth)
+      Scrollbar.setCustom(this._scrollbarWidth)
     }
 
     document.body.classList.add(CLASS_NAME_OPEN)
   }
 
   _resetScrollbar() {
-    resetScrollbar()
+    Scrollbar.reset()
   }
 
   _getScrollbarWidth() {
-    return getScrollBarWidth()
+    return Scrollbar.getWidth()
   }
 
   // Static
