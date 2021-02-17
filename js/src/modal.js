@@ -13,7 +13,8 @@ import {
   isVisible,
   isRTL,
   reflow,
-  typeCheckConfig
+  typeCheckConfig,
+  getDocument
 } from './util/index'
 import Data from './dom/data'
 import EventHandler from './dom/event-handler'
@@ -234,7 +235,7 @@ class Modal extends BaseComponent {
 
     if (!this._element.parentNode || this._element.parentNode.nodeType !== Node.ELEMENT_NODE) {
       // Don't move modal's DOM position
-      document.body.appendChild(this._element)
+      this._document.body.appendChild(this._element)
     }
 
     this._element.style.display = 'block'
@@ -319,7 +320,7 @@ class Modal extends BaseComponent {
     this._element.removeAttribute('role')
     this._isTransitioning = false
     this._showBackdrop(() => {
-      document.body.classList.remove(CLASS_NAME_OPEN)
+      this._document.body.classList.remove(CLASS_NAME_OPEN)
       this._resetAdjustments()
       this._resetScrollbar()
       EventHandler.trigger(this._element, EVENT_HIDDEN)
@@ -337,14 +338,14 @@ class Modal extends BaseComponent {
       ''
 
     if (this._isShown && this._config.backdrop) {
-      this._backdrop = document.createElement('div')
+      this._backdrop = this._document.createElement('div')
       this._backdrop.className = CLASS_NAME_BACKDROP
 
       if (animate) {
         this._backdrop.classList.add(animate)
       }
 
-      document.body.appendChild(this._backdrop)
+      this._document.body.appendChild(this._backdrop)
 
       EventHandler.on(this._element, EVENT_CLICK_DISMISS, event => {
         if (this._ignoreBackdropClick) {
@@ -404,7 +405,7 @@ class Modal extends BaseComponent {
       return
     }
 
-    const isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight
+    const isModalOverflowing = this._element.scrollHeight > this._document.documentElement.clientHeight
 
     if (!isModalOverflowing) {
       this._element.style.overflowY = 'hidden'
@@ -431,7 +432,7 @@ class Modal extends BaseComponent {
   // ----------------------------------------------------------------------
 
   _adjustDialog() {
-    const isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight
+    const isModalOverflowing = this._element.scrollHeight > this._document.documentElement.clientHeight
 
     if ((!this._isBodyOverflowing && isModalOverflowing && !isRTL()) || (this._isBodyOverflowing && !isModalOverflowing && isRTL())) {
       this._element.style.paddingLeft = `${this._scrollbarWidth}px`
@@ -448,8 +449,8 @@ class Modal extends BaseComponent {
   }
 
   _checkScrollbar() {
-    const rect = document.body.getBoundingClientRect()
-    this._isBodyOverflowing = Math.round(rect.left + rect.right) < window.innerWidth
+    const rect = this._document.body.getBoundingClientRect()
+    this._isBodyOverflowing = Math.round(rect.left + rect.right) < this._window.innerWidth
     this._scrollbarWidth = this._getScrollbarWidth()
   }
 
@@ -460,14 +461,14 @@ class Modal extends BaseComponent {
       this._setElementAttributes('body', 'paddingRight', calculatedValue => calculatedValue + this._scrollbarWidth)
     }
 
-    document.body.classList.add(CLASS_NAME_OPEN)
+    this._document.body.classList.add(CLASS_NAME_OPEN)
   }
 
   _setElementAttributes(selector, styleProp, callback) {
     SelectorEngine.find(selector)
       .forEach(element => {
         const actualValue = element.style[styleProp]
-        const calculatedValue = window.getComputedStyle(element)[styleProp]
+        const calculatedValue = this._window.getComputedStyle(element)[styleProp]
         Manipulator.setDataAttribute(element, styleProp, actualValue)
         element.style[styleProp] = callback(Number.parseFloat(calculatedValue)) + 'px'
       })
@@ -482,7 +483,7 @@ class Modal extends BaseComponent {
   _resetElementAttributes(selector, styleProp) {
     SelectorEngine.find(selector).forEach(element => {
       const value = Manipulator.getDataAttribute(element, styleProp)
-      if (typeof value === 'undefined' && element === document.body) {
+      if (typeof value === 'undefined' && element === this._document.body) {
         element.style[styleProp] = ''
       } else {
         Manipulator.removeDataAttribute(element, styleProp)
@@ -492,11 +493,11 @@ class Modal extends BaseComponent {
   }
 
   _getScrollbarWidth() { // thx d.walsh
-    const scrollDiv = document.createElement('div')
+    const scrollDiv = this._document.createElement('div')
     scrollDiv.className = CLASS_NAME_SCROLLBAR_MEASURER
-    document.body.appendChild(scrollDiv)
+    this._document.body.appendChild(scrollDiv)
     const scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth
-    document.body.removeChild(scrollDiv)
+    this._document.body.removeChild(scrollDiv)
     return scrollbarWidth
   }
 
@@ -532,7 +533,7 @@ class Modal extends BaseComponent {
  * ------------------------------------------------------------------------
  */
 
-EventHandler.on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
+EventHandler.on(getDocument(), EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
   const target = getElementFromSelector(this)
 
   if (this.tagName === 'A' || this.tagName === 'AREA') {

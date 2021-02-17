@@ -6,6 +6,7 @@
  */
 
 import Data from './dom/data'
+import { getWindow, getDocument } from './util/index'
 
 /**
  * ------------------------------------------------------------------------
@@ -22,6 +23,8 @@ class BaseComponent {
     }
 
     this._element = element
+    this._window = getWindow()
+    this._document = getDocument()
     Data.setData(element, this.constructor.DATA_KEY, this)
   }
 
