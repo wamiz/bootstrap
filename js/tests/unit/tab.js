@@ -214,10 +214,10 @@ $(function () {
       .end()
       .find('ul > li:last-child button')
       .on('show.bs.tab', function (e) {
-        assert.strictEqual(e.relatedTarget.hash, '#home', 'references correct element as relatedTarget')
+        assert.strictEqual(e.relatedTarget.getAttribute('data-target'), '#home', 'references correct element as relatedTarget')
       })
       .on('shown.bs.tab', function (e) {
-        assert.strictEqual(e.relatedTarget.hash, '#home', 'references correct element as relatedTarget')
+        assert.strictEqual(e.relatedTarget.getAttribute('data-target'), '#home', 'references correct element as relatedTarget')
         done()
       })
       .bootstrapTab('show')
@@ -291,10 +291,10 @@ $(function () {
     $(tabsHTML)
       .find('li:first-child button')
       .on('hide.bs.tab', function (e) {
-        assert.strictEqual(e.relatedTarget.hash, '#profile', 'references correct element as relatedTarget')
+        assert.strictEqual(e.relatedTarget.getAttribute('data-target'), '#profile', 'references correct element as relatedTarget')
       })
       .on('hidden.bs.tab', function (e) {
-        assert.strictEqual(e.relatedTarget.hash, '#profile', 'references correct element as relatedTarget')
+        assert.strictEqual(e.relatedTarget.getAttribute('data-target'), '#profile', 'references correct element as relatedTarget')
         done()
       })
       .bootstrapTab('show')
