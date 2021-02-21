@@ -397,10 +397,8 @@ class Carousel {
 
       const indicators = this._indicatorsElement.querySelectorAll(SELECTOR_INDICATOR)
 
-      Number.parseInt = Number.parseInt || parseInt // IE11 mini-polyfill
-
       for (let i = 0; i < indicators.length; i++) {
-        if (Number.parseInt(indicators[i].getAttribute('data-slide-to'), 10) === this._getItemIndex(element)) {
+        if (parseInt(indicators[i].getAttribute('data-slide-to'), 10) === this._getItemIndex(element)) {
           $(indicators[i]).addClass(CLASS_NAME_ACTIVE)
           $(indicators[i]).attr('aria-current', 'true')
           break
