@@ -10,8 +10,8 @@ import {
   emulateTransitionEnd,
   getElementFromSelector,
   getTransitionDurationFromElement,
-  isRTL,
   isVisible,
+  isRTL,
   reflow,
   typeCheckConfig
 } from './util/index'
@@ -20,7 +20,6 @@ import EventHandler from './dom/event-handler'
 import Manipulator from './dom/manipulator'
 import SelectorEngine from './dom/selector-engine'
 import BaseComponent from './base-component'
-import { isBodyOverflowing } from './util/scrollbar'
 
 /**
  * ------------------------------------------------------------------------
@@ -449,7 +448,8 @@ class Modal extends BaseComponent {
   }
 
   _checkScrollbar() {
-    this._isBodyOverflowing = isBodyOverflowing()
+    const rect = document.body.getBoundingClientRect()
+    this._isBodyOverflowing = Math.round(rect.left + rect.right) < window.innerWidth
     this._scrollbarWidth = this._getScrollbarWidth()
   }
 
