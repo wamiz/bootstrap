@@ -32,9 +32,9 @@ html {
 // Shim for "new" HTML5 structural elements to display correctly (IE10, older browsers)
 // TODO: remove in v5
 // stylelint-disable-next-line selector-list-comma-newline-after
-article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
-  display: block;
-}
+//article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
+//  display: block;
+//}
 
 // Body
 //
@@ -63,9 +63,9 @@ body {
 //
 // See https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible
 // and https://developer.paciellogroup.com/blog/2018/03/focus-visible-and-backwards-compatibility/
-[tabindex="-1"]:focus:not(:focus-visible) {
-  outline: 0 !important;
-}
+//[tabindex="-1"]:focus:not(:focus-visible) {
+//  outline: 0 !important;
+//}
 
 
 // Content grouping
@@ -73,11 +73,11 @@ body {
 // 1. Add the correct box sizing in Firefox.
 // 2. Show the overflow in Edge and IE.
 
-hr {
-  box-sizing: content-box; // 1
-  height: 0; // 1
-  overflow: visible; // 2
-}
+//hr {
+//  box-sizing: content-box; // 1
+//  height: 0; // 1
+//  overflow: visible; // 2
+//}
 
 
 //
@@ -89,19 +89,19 @@ hr {
 // By default, `<h1>`-`<h6>` all receive top and bottom margins. We nuke the top
 // margin for easier control within type scales as it avoids margin collapsing.
 // stylelint-disable-next-line selector-list-comma-newline-after
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 0;
-  margin-bottom: $headings-margin-bottom;
-}
+//h1, h2, h3, h4, h5, h6 {
+//  margin-top: 0;
+//  margin-bottom: $headings-margin-bottom;
+//}
 
 // Reset margins on paragraphs
 //
 // Similarly, the top margin on `<p>`s get reset. However, we also reset the
 // bottom margin to use `rem` units instead of `em`.
-p {
-  margin-top: 0;
-  margin-bottom: $paragraph-margin-bottom;
-}
+//p {
+//  margin-top: 0;
+//  margin-bottom: $paragraph-margin-bottom;
+//}
 
 // Abbreviations
 //
@@ -111,34 +111,35 @@ p {
 // 4. Remove the bottom border in Firefox 39-.
 // 5. Prevent the text-decoration to be skipped.
 
-abbr[title],
-abbr[data-original-title] { // 1
-  text-decoration: underline; // 2
-  text-decoration: underline dotted; // 2
-  cursor: help; // 3
-  border-bottom: 0; // 4
-  text-decoration-skip-ink: none; // 5
-}
-
-address {
-  margin-bottom: 1rem;
-  font-style: normal;
-  line-height: inherit;
-}
+//abbr[title],
+//abbr[data-original-title] { // 1
+//  text-decoration: underline; // 2
+//  text-decoration: underline dotted; // 2
+//  cursor: help; // 3
+//  border-bottom: 0; // 4
+//  text-decoration-skip-ink: none; // 5
+//}
+//
+//address {
+//  margin-bottom: 1rem;
+//  font-style: normal;
+//  line-height: inherit;
+//}
 
 ol,
 ul,
 dl {
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
+  list-style: none;
 }
 
-ol ol,
-ul ul,
-ol ul,
-ul ol {
-  margin-bottom: 0;
-}
+//ol ol,
+//ul ul,
+//ol ul,
+//ul ol {
+//  margin-bottom: 0;
+//}
 
 dt {
   font-weight: $dt-font-weight;
@@ -167,82 +168,82 @@ small {
 // all browsers.
 //
 
-sub,
-sup {
-  position: relative;
-  @include font-size(75%);
-  line-height: 0;
-  vertical-align: baseline;
-}
-
-sub { bottom: -.25em; }
-sup { top: -.5em; }
+//sub,
+//sup {
+//  position: relative;
+//  @include font-size(75%);
+//  line-height: 0;
+//  vertical-align: baseline;
+//}
+//
+//sub { bottom: -.25em; }
+//sup { top: -.5em; }
 
 
 //
 // Links
 //
 
-a {
-  color: $link-color;
-  text-decoration: $link-decoration;
-  background-color: transparent; // Remove the gray background on active links in IE 10.
-
-  @include hover() {
-    color: $link-hover-color;
-    text-decoration: $link-hover-decoration;
-  }
-}
+//a {
+//  color: $link-color;
+//  text-decoration: $link-decoration;
+//  background-color: transparent; // Remove the gray background on active links in IE 10.
+//
+//  @include hover() {
+//    color: $link-hover-color;
+//    text-decoration: $link-hover-decoration;
+//  }
+//}
 
 // And undo these styles for placeholder links/named anchors (without href).
 // It would be more straightforward to just use a[href] in previous block, but that
 // causes specificity issues in many other styles that are too complex to fix.
 // See https://github.com/twbs/bootstrap/issues/19402
 
-a:not([href]) {
-  color: inherit;
-  text-decoration: none;
-
-  @include hover() {
-    color: inherit;
-    text-decoration: none;
-  }
-}
+//a:not([href]) {
+//  color: inherit;
+//  text-decoration: none;
+//
+//  @include hover() {
+//    color: inherit;
+//    text-decoration: none;
+//  }
+//}
 
 
 //
 // Code
 //
 
-pre,
-code,
-kbd,
-samp {
-  font-family: $font-family-monospace;
-  @include font-size(1em); // Correct the odd `em` font sizing in all browsers.
-}
-
-pre {
-  // Remove browser default top margin
-  margin-top: 0;
-  // Reset browser default of `1em` to use `rem`s
-  margin-bottom: 1rem;
-  // Don't allow content to break outside
-  overflow: auto;
-  // Disable auto-hiding scrollbar in IE & legacy Edge to avoid overlap,
-  // making it impossible to interact with the content
-  -ms-overflow-style: scrollbar;
-}
+//pre,
+//code,
+//kbd,
+//samp {
+//  font-family: $font-family-monospace;
+//  @include font-size(1em); // Correct the odd `em` font sizing in all browsers.
+//}
+//
+//pre {
+//  // Remove browser default top margin
+//  margin-top: 0;
+//  // Reset browser default of `1em` to use `rem`s
+//  margin-bottom: 1rem;
+//  // Don't allow content to break outside
+//  overflow: auto;
+//  // Disable auto-hiding scrollbar in IE & legacy Edge to avoid overlap,
+//  // making it impossible to interact with the content
+//  -ms-overflow-style: scrollbar;
+//}
 
 
 //
 // Figures
 //
 
-figure {
-  // Apply a consistent margin strategy (matches our type styles).
-  margin: 0 0 1rem;
-}
+//figure {
+//  // Apply a consistent margin strategy (matches our type styles).
+//  margin: 0 0 1rem;
+//}
 
 
 //
@@ -292,7 +293,7 @@ th {
 label {
   // Allow labels to use `margin` for spacing.
   display: inline-block;
-  margin-bottom: $label-margin-bottom;
+  //margin-bottom: $label-margin-bottom;
 }
 
 // Remove the default `border-radius` that macOS Chrome adds.
@@ -407,21 +408,21 @@ fieldset {
 
 // 1. Correct the text wrapping in Edge and IE.
 // 2. Correct the color inheritance from `fieldset` elements in IE.
-legend {
-  display: block;
-  width: 100%;
-  max-width: 100%; // 1
-  padding: 0;
-  margin-bottom: .5rem;
-  @include font-size(1.5rem);
-  line-height: inherit;
-  color: inherit; // 2
-  white-space: normal; // 1
-}
+//legend {
+//  display: block;
+//  width: 100%;
+//  max-width: 100%; // 1
+//  padding: 0;
+//  margin-bottom: .5rem;
+//  @include font-size(1.5rem);
+//  line-height: inherit;
+//  color: inherit; // 2
+//  white-space: normal; // 1
+//}
 
-progress {
-  vertical-align: baseline; // Add the correct vertical alignment in Chrome, Firefox, and Opera.
-}
+//progress {
+//  vertical-align: baseline; // Add the correct vertical alignment in Chrome, Firefox, and Opera.
+//}
 
 // Correct the cursor style of increment and decrement buttons in Chrome.
 [type="number"]::-webkit-inner-spin-button,
@@ -460,21 +461,21 @@ progress {
 // Correct element displays
 //
 
-output {
-  display: inline-block;
-}
-
-summary {
-  display: list-item; // Add the correct display in all browsers
-  cursor: pointer;
-}
-
-template {
-  display: none; // Add the correct display in IE
-}
-
-// Always hide an element with the `hidden` HTML attribute (from PureCSS).
-// Needed for proper display in IE 10-.
-[hidden] {
-  display: none !important;
-}
+//output {
+//  display: inline-block;
+//}
+//
+//summary {
+//  display: list-item; // Add the correct display in all browsers
+//  cursor: pointer;
+//}
+//
+//template {
+//  display: none; // Add the correct display in IE
+//}
+//
+//// Always hide an element with the `hidden` HTML attribute (from PureCSS).
+//// Needed for proper display in IE 10-.
+//[hidden] {
+//  display: none !important;
+//}
